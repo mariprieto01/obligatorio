@@ -1,0 +1,18 @@
+version: '3.1'
+
+services:
+  db:
+    image: mysql:8.0.37
+    container_name: obligatorio_bd1
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: obligatorio
+      MYSQL_DATABASE: obligatorio
+    volumes:
+      - volume1:/var/lib/mysql
+
+volumes:
+  volume1:
