@@ -1,11 +1,17 @@
 import mysql.connector
 
-def get_db_connection():
-    cnx = mysql.connector.connect(
-        user='root',
-        password='root',
+def get_admin_connection():
+    return mysql.connector.connect(
+        user='admin_user',
+        password='administrador',
         host='127.0.0.1',
-        port= 3307,
         database='obligatorio'
     )
-    return cnx
+
+def get_user_connection():
+    return mysql.connector.connect(
+        user='user',
+        password='usuario',
+        host='127.0.0.1',
+        database='obligatorio'
+    )
