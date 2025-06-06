@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Cafés Marloy{% endblock %}</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('/static/assets/fondo.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        header {
+            background-color: #4a241b;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .left-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo {
+            height: 40px;
+            width: auto;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #fdf8d2;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            flex-grow: 1;
+            justify-content: center;
+        }
+
+        .nav-links a {
+            color: #fdf8d2;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
+        }
+
+        .logout {
+            display: flex;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+        }
+
+        .bienvenida {
+            text-align: center;
+            margin-top: 100px;
+            font-size: 2rem;
+            color: #4a241b;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            color: #666;
+            font-size: 0.8rem;
+            margin-top: 50px;
+        }
+
+        button.primary {
+            background-color: #fdf8d2;
+            color: #7E432D;
+            border: none;
+            padding: 8px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        button.primary:hover {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="left-section">
+        <a href="/"><img src="/static/assets/logo.png" alt="Logo Cafés Marloy" class="logo"></a>
+        <h1>Cafés Marloy</h1>
+    </div>
+
+    <nav class="nav-links">
+        <a href="/clientes">Clientes</a>
+        <a href="/insumos">Insumos</a>
+        <a href="/proveedores">Proveedores</a>
+        <a href="/maquinas">Máquinas</a>
+        <a href="/tecnicos">Técnicos</a>
+        <a href="/consumos">Consumos</a>
+        <a href="/reportes">Reportes</a>
+    </nav>
+
+    {% if usuario %}
+    <div class="logout">
+        <button class="primary" onclick="location.href='/logout'">Cerrar sesión</button>
+    </div>
+    {% endif %}
+</header>
+
+<div class="container">
+    {% if usuario %}
+    <div class="bienvenida">
+        Bienvenido, {{ usuario.correo }}
+    </div>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+</div>
+
+<footer>
+    &copy; 2025 Cafés Marloy - Sistema de Gestión
+</footer>
+
+</body>
+</html>
