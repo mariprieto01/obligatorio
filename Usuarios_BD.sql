@@ -1,3 +1,6 @@
+DROP DATABASE IF EXISTS obligatorio;
+CREATE DATABASE obligatorio;
+
 CREATE USER 'admin_user'@'localhost' IDENTIFIED BY 'administrador';
 CREATE USER 'user'@'localhost' IDENTIFIED BY 'usuario';
 

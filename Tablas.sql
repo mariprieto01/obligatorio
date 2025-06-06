@@ -1,5 +1,3 @@
-DROP DATABASE IF EXISTS obligatorio;
-CREATE DATABASE obligatorio;
 USE obligatorio;
 
 CREATE TABLE Login (
