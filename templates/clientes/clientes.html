@@ -1,10 +1,107 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Clientes - Cafés Marloy{% endblock %}
+
+{% block content %}
+<h2 class="titulo-tabla">Listado de Clientes</h2>
+
+<table id="tabla-clientes" class="tabla-estilo">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Dirección</th>
+            <th>Teléfono</th>
+            <th>Correo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cliente in clientes %}
+        <tr
+            data-id_cliente="{{ cliente.id_cliente }}"
+            data-nombre="{{ cliente.nombre }}"
+            data-direccion="{{ cliente.direccion }}"
+            data-telefono="{{ cliente.telefono }}"
+            data-correo="{{ cliente.correo }}">
+            <td>{{ cliente.id_cliente }}</td>
+            <td>{{ cliente.nombre }}</td>
+            <td>{{ cliente.direccion }}</td>
+            <td>{{ cliente.telefono }}</td>
+            <td>{{ cliente.correo }}</td>
+            <td>
+                <button class="primary editar-btn">Editar</button>
+                <form method="POST" action="{{ url_for('eliminar_cliente', id_cliente=cliente.id_cliente) }}" style="display:inline;">
+                    <button type="submit" class="cancelar" onclick="return confirm('¿Estás seguro que querés eliminar a {{ cliente.nombre }}?')">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="btn-container">
+    <a href="{{ url_for('nuevo_cliente') }}">
+        <button class="primary">Agregar nuevo cliente</button>
+    </a>
+</div>
+
+<!-- Modal editar cliente -->
+<div id="modalEditar" class="modal">
+    <div class="modal-content">
+        <h3>Editar Cliente</h3>
+        <form id="formEditar" method="POST">
+            <input type="hidden" name="id_cliente" id="editar-id_cliente">
+
+            <label>Nombre:</label><br>
+            <input type="text" name="nombre" id="editar-nombre" required><br><br>
+
+            <label>Dirección:</label><br>
+            <input type="text" name="direccion" id="editar-direccion" required><br><br>
+
+            <label>Teléfono:</label><br>
+            <input type="text" name="telefono" id="editar-telefono" required><br><br>
+
+            <label>Correo:</label><br>
+            <input type="email" name="correo" id="editar-correo" required><br><br>
+
+            <button type="submit" class="primary">Guardar cambios</button>
+            <button type="button" class="cancelar" onclick="cerrarModal()">Cancelar</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const modalEditar = document.getElementById('modalEditar');
+    const formEditar = document.getElementById('formEditar');
+
+    // Función para cerrar el modal
+    function cerrarModal() {
+        modalEditar.style.display = 'none';
+    }
+
+    // Abrir modal con datos cargados
+    document.querySelectorAll('.editar-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tr = btn.closest('tr');
+            document.getElementById('editar-id_cliente').value = tr.dataset.id_cliente;
+            document.getElementById('editar-nombre').value = tr.dataset.nombre;
+            document.getElementById('editar-direccion').value = tr.dataset.direccion;
+            document.getElementById('editar-telefono').value = tr.dataset.telefono;
+            document.getElementById('editar-correo').value = tr.dataset.correo;
+
+            // Ajustar acción del form para enviar al endpoint correcto
+            formEditar.action = `/clientes/editar/${tr.dataset.id_cliente}`;
+            modalEditar.style.display = 'flex';
+        });
+    });
+
+    // Cerrar modal si se clickea fuera del formulario
+    window.onclick = function(event) {
+        if (event.target == modalEditar) {
+            cerrarModal();
+        }
+    }
+</script>
+
+{% endblock %}

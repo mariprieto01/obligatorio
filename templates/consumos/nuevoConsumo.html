@@ -1,10 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Nuevo Consumo{% endblock %}
 
-</body>
-</html>
+{% block content %}
+<h2 class="titulo-tabla">Registrar nuevo consumo</h2>
+
+<form action="{{ url_for('crear_consumo') }}" method="POST" class="formulario-nuevo">
+    <label for="id_maquina">Máquina:</label>
+    <select name="id_maquina" required>
+        {% for maquina in maquinas %}
+        <option value="{{ maquina.id_maquina }}">{{ maquina.modelo }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="id_insumo">Insumo:</label>
+    <select name="id_insumo" required>
+        {% for insumo in insumos %}
+        <option value="{{ insumo.id_insumo }}">{{ insumo.descripcion }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="fecha">Fecha:</label>
+    <input type="date" name="fecha" required>
+
+    <label for="cantidad_usada">Cantidad usada:</label>
+    <input type="number" name="cantidad_usada" min="1" required>
+
+    <button type="submit" class="primary">Guardar</button>
+    <a href="{{ url_for('mostrar_consumos') }}"><button type="button" class="cancelar">Cancelar</button></a>
+</form>
+{% endblock %}

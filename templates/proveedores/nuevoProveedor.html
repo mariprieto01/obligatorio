@@ -1,10 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Nuevo Proveedor - Cafés Marloy{% endblock %}
+
+{% block content %}
+<h2 class="titulo-tabla" style="margin-bottom: 20px;">Agregar nuevo proveedor</h2>
+
+<form method="POST" class="formulario-nuevo">
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <label>Nombre:</label>
+    <input type="text" name="nombre" required>
+
+    <label>Dirección:</label>
+    <input type="text" name="direccion" required>
+
+    <label>Teléfono:</label>
+    <input type="text" name="telefono" required>
+
+    <button type="submit" class="primary">Agregar</button>
+    <a href="{{ url_for('mostrar_proveedores') }}">
+        <button type="button" class="cancelar">Cancelar</button>
+    </a>
+</form>
+{% endblock %}

@@ -1,0 +1,246 @@
+body {
+    font-family: 'Georgia', serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('/static/assets/fondo.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+header {
+    background-color: #4a241b;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.left-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    height: 40px;
+    width: auto;
+}
+
+.logo-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.logo-link h1 {
+    color: #fdf8d2;
+    margin: 0;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #fdf8d2;
+}
+
+.nav-links {
+    display: flex;
+    gap: 15px;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.nav-links a {
+    color: #fdf8d2;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.nav-links a:hover {
+    color: #ffffff;
+}
+
+.logout {
+    display: flex;
+    align-items: center;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    color: #666;
+    font-size: 0.8rem;
+    margin-top: 50px;
+}
+
+button.primary {
+    background-color: #fdf8d2;
+    color: #7E432D;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+button.primary:hover {
+    background-color: #ffffff;
+}
+
+button.cancelar {
+    background-color: #d64545;
+    color: white;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+button.cancelar:hover {
+    background-color: #b73838;
+}
+
+.bienvenida {
+    text-align: center;
+    margin-top: 100px;
+    font-size: 2rem;
+    color: #4a241b;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 8px 10px;
+    margin: 4px 0 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-family: 'Georgia', serif;
+    font-size: 1rem;
+}
+
+/* Tabla general */
+.tabla-estilo {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.tabla-estilo thead {
+    background-color: #fdf8d2;
+}
+
+.tabla-estilo th,
+.tabla-estilo td {
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+/* Alternar color filas (par / impar) */
+.tabla-estilo tbody tr:nth-child(even) {
+    background-color: #fff;
+}
+
+.tabla-estilo tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.tabla-margin-bottom {
+    margin-bottom: 30px;
+}
+
+.centrado {
+    text-align: center;
+}
+
+/* Centramos el título h2 y ponemos color */
+.titulo-tabla {
+    text-align: center;
+    color: #4a241b;
+    margin-top: 30px;
+}
+
+/* Contenedor del botón Agregar nuevo cliente */
+.btn-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Formulario en línea para el botón eliminar */
+.form-inline {
+    display: inline;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 90%;
+}
+
+.formulario-nuevo {
+    max-width: 500px;
+    margin: 30px auto;
+}
+
+/* Nuevos estilos para etiquetas y campos en formulario-nuevo */
+.formulario-nuevo label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.formulario-nuevo input,
+.formulario-nuevo select,
+.formulario-nuevo textarea {
+    display: block;           /* para que respeten el ancho completo */
+    width: 100%;              /* ya lo tenés, pero se asegura */
+    padding: 8px 10px;
+    margin-bottom: 20px;      /* un poco más de espacio */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;   /* importante para que padding no aumente ancho */
+    font-family: 'Georgia', serif;
+    font-size: 1rem;
+}
+
+.formulario-nuevo label {
+    display: block;
+    margin-bottom: 8px;       /* un poco más de espacio bajo label */
+    font-weight: bold;
+}

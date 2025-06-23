@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio - Cafés Marloy{% endblock %}
+
+{% block content %}
+    {% if usuario %}
+    <div class="bienvenida">
+        Bienvenido, {{ usuario.correo }}
+    </div>
+    {% endif %}
+{% endblock %}

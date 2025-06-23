@@ -1,10 +1,107 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Insumos - Cafés Marloy{% endblock %}
+
+{% block content %}
+<h2 class="titulo-tabla">Listado de Insumos</h2>
+
+<table id="tabla-insumos" class="tabla-estilo tabla-margin-bottom">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Descripción</th>
+            <th>Tipo</th>
+            <th>Precio Unitario</th>
+            <th>Proveedor</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for insumo in insumos %}
+        <tr
+            data-id_insumo="{{ insumo.id_insumo }}"
+            data-descripcion="{{ insumo.descripcion }}"
+            data-tipo="{{ insumo.tipo }}"
+            data-precio_unitario="{{ insumo.precio_unitario }}"
+            data-id_proveedor="{{ insumo.id_proveedor }}">
+            <td>{{ insumo.id_insumo }}</td>
+            <td>{{ insumo.descripcion }}</td>
+            <td>{{ insumo.tipo }}</td>
+            <td>${{ "%.2f"|format(insumo.precio_unitario) }}</td>
+            <td>{{ insumo.nombre_proveedor }}</td>
+            <td>
+                <button class="primary editar-btn">Editar</button>
+                <form method="POST" action="{{ url_for('eliminar_insumo', id_insumo=insumo.id_insumo) }}" class="form-inline">
+                    <button type="submit" class="cancelar" onclick="return confirm('¿Estás seguro que querés eliminar este insumo?')">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="btn-container">
+    <a href="{{ url_for('nuevo_insumo') }}">
+        <button class="primary">Agregar nuevo insumo</button>
+    </a>
+</div>
+
+<!-- Modal editar insumo -->
+<div id="modalEditar" class="modal">
+    <div class="modal-content formulario-nuevo">
+        <h3>Editar Insumo</h3>
+        <form id="formEditar" method="POST">
+            <input type="hidden" name="id_insumo" id="editar-id_insumo">
+
+            <label for="editar-descripcion">Descripción:</label>
+            <input type="text" name="descripcion" id="editar-descripcion" required>
+
+            <label for="editar-tipo">Tipo:</label>
+            <input type="text" name="tipo" id="editar-tipo" required>
+
+            <label for="editar-precio_unitario">Precio Unitario:</label>
+            <input type="number" step="0.01" min="0" name="precio_unitario" id="editar-precio_unitario" required>
+
+            <label for="editar-id_proveedor">Proveedor:</label>
+            <select name="id_proveedor" id="editar-id_proveedor" required>
+                {% for proveedor in proveedores %}
+                <option value="{{ proveedor.id_proveedor }}">{{ proveedor.nombre }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="primary">Guardar cambios</button>
+            <button type="button" class="cancelar" onclick="cerrarModal()">Cancelar</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const modalEditar = document.getElementById('modalEditar');
+    const formEditar = document.getElementById('formEditar');
+
+    function cerrarModal() {
+        modalEditar.style.display = 'none';
+    }
+
+    document.querySelectorAll('.editar-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tr = btn.closest('tr');
+            document.getElementById('editar-id_insumo').value = tr.dataset.id_insumo;
+            document.getElementById('editar-descripcion').value = tr.dataset.descripcion;
+            document.getElementById('editar-tipo').value = tr.dataset.tipo;
+            document.getElementById('editar-precio_unitario').value = tr.dataset.precio_unitario;
+            document.getElementById('editar-id_proveedor').value = tr.dataset.id_proveedor;
+
+            formEditar.action = `/insumos/editar/${tr.dataset.id_insumo}`;
+            modalEditar.style.display = 'flex';
+        });
+    });
+
+    window.onclick = function(event) {
+        if (event.target == modalEditar) {
+            cerrarModal();
+        }
+    }
+</script>
+
+{% endblock %}

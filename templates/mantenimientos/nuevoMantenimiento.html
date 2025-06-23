@@ -1,10 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Nuevo Mantenimiento - Cafés Marloy{% endblock %}
+
+{% block content %}
+<h2 class="titulo-tabla">Agregar Nuevo Mantenimiento</h2>
+
+<form method="POST" action="{{ url_for('crear_mantenimiento') }}" class="formulario-nuevo">
+    <label for="id_maquina">Máquina:</label>
+    <select name="id_maquina" id="id_maquina" required>
+        <option value="">Seleccione una máquina</option>
+        {% for maquina in maquinas %}
+        <option value="{{ maquina.id_maquina }}">{{ maquina.modelo }} - Cliente {{ maquina.id_cliente }}</option>
+        {% endfor %}
+    </select><br><br>
+
+    <label for="ci_tecnico">Técnico:</label>
+    <select name="ci_tecnico" id="ci_tecnico" required>
+        <option value="">Seleccione un técnico</option>
+        {% for tecnico in tecnicos %}
+        <option value="{{ tecnico.ci }}">{{ tecnico.nombre }} {{ tecnico.apellido }}</option>
+        {% endfor %}
+    </select><br><br>
+
+    <label for="tipo">Tipo de mantenimiento:</label>
+    <input type="text" id="tipo" name="tipo" required><br><br>
+
+    <label for="fecha">Fecha:</label>
+    <input type="date" id="fecha" name="fecha" required><br><br>
+
+    <label for="observaciones">Observaciones:</label>
+    <textarea id="observaciones" name="observaciones"></textarea><br><br>
+
+    <button type="submit" class="primary">Agregar</button>
+    <a href="{{ url_for('mostrar_mantenimientos') }}"><button type="button" class="cancelar">Cancelar</button></a>
+</form>
+{% endblock %}

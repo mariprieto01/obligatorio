@@ -1,10 +1,102 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Proveedores - Cafés Marloy{% endblock %}
+
+{% block content %}
+<h2 class="titulo-tabla">Listado de Proveedores</h2>
+
+<table class="tabla-estilo" id="tabla-proveedores">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Dirección</th>
+            <th>Teléfono</th>
+            {% if es_admin %}
+            <th>Acciones</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for proveedor in proveedores %}
+        <tr
+            data-id="{{ proveedor.id_proveedor }}"
+            data-nombre="{{ proveedor.nombre }}"
+            data-direccion="{{ proveedor.direccion }}"
+            data-telefono="{{ proveedor.telefono }}">
+            <td>{{ proveedor.id_proveedor }}</td>
+            <td>{{ proveedor.nombre }}</td>
+            <td>{{ proveedor.direccion }}</td>
+            <td>{{ proveedor.telefono }}</td>
+            {% if es_admin %}
+            <td>
+                <button class="primary editar-btn">Editar</button>
+                <form method="POST" action="{{ url_for('eliminar_proveedor', id_proveedor=proveedor.id_proveedor) }}" class="form-inline">
+                    <button type="submit" class="cancelar" onclick="return confirm('¿Estás seguro que querés eliminar este proveedor?')">Eliminar</button>
+                </form>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if es_admin %}
+<div class="btn-container">
+    <a href="{{ url_for('nuevo_proveedor') }}">
+        <button class="primary">Agregar nuevo proveedor</button>
+    </a>
+</div>
+{% endif %}
+
+<!-- Modal editar proveedor -->
+<div id="modalEditar" class="modal">
+    <div class="modal-content formulario-nuevo">
+        <h3>Editar Proveedor</h3>
+        <form id="formEditar" method="POST">
+            <input type="hidden" name="id_proveedor" id="editar-id">
+
+            <label>Nombre:</label>
+            <input type="text" name="nombre" id="editar-nombre" required>
+
+            <label>Dirección:</label>
+            <input type="text" name="direccion" id="editar-direccion" required>
+
+            <label>Teléfono:</label>
+            <input type="text" name="telefono" id="editar-telefono" required>
+
+            <button type="submit" class="primary">Guardar cambios</button>
+            <button type="button" class="cancelar" onclick="cerrarModal()">Cancelar</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const modalEditar = document.getElementById('modalEditar');
+    const formEditar = document.getElementById('formEditar');
+
+    function cerrarModal() {
+        modalEditar.style.display = 'none';
+    }
+
+    document.querySelectorAll('.editar-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tr = btn.closest('tr');
+            document.getElementById('editar-id').value = tr.dataset.id;
+            document.getElementById('editar-nombre').value = tr.dataset.nombre;
+            document.getElementById('editar-direccion').value = tr.dataset.direccion;
+            document.getElementById('editar-telefono').value = tr.dataset.telefono;
+
+            formEditar.action = `/proveedores/editar/${tr.dataset.id}`;
+            modalEditar.style.display = 'flex';
+        });
+    });
+
+    window.onclick = function(event) {
+        if (event.target == modalEditar) {
+            cerrarModal();
+        }
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Reportes - Cafés Marloy{% endblock %}
+
+{% block content %}
+<h2 class="titulo-tabla">Reportes</h2>
+
+<!-- Total mensual a cobrar a cada cliente -->
+<h3>Total mensual a cobrar a cada cliente</h3>
+{% if totales_clientes %}
+<table class="tabla-estilo">
+    <thead>
+        <tr>
+            <th>Cliente</th>
+            <th>Alquiler mensual</th>
+            <th>Consumo insumos</th>
+            <th>Total mes</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in totales_clientes %}
+        <tr>
+            <td>{{ c.cliente }}</td>
+            <td>${{ '%.2f' | format(c.total_alquiler) }}</td>
+            <td>${{ '%.2f' | format(c.total_consumo) }}</td>
+            <td>${{ '%.2f' | format(c.total_mes) }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No hay datos disponibles.</p>
+{% endif %}
+
+<!-- Insumos con mayor consumo y costos -->
+<h3>Insumos con mayor consumo y costos</h3>
+{% if insumos_mayor_consumo %}
+<table class="tabla-estilo">
+    <thead>
+        <tr>
+            <th>Descripción</th>
+            <th>Cantidad consumida</th>
+            <th>Costo total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in insumos_mayor_consumo %}
+        <tr>
+            <td>{{ i.descripcion }}</td>
+            <td>{{ i.total_cantidad }}</td>
+            <td>${{ '%.2f' | format(i.total_costo) }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No hay datos disponibles.</p>
+{% endif %}
+
+<!-- Técnicos con más mantenimientos realizados -->
+<h3>Técnicos con más mantenimientos realizados</h3>
+{% if tecnicos_top %}
+<table class="tabla-estilo">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Cantidad mantenimientos</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for t in tecnicos_top %}
+        <tr style="background-color: {% if loop.index is even %}#fff{% else %}#f9f9f9{% endif %};">
+            <td>{{ t.nombre }}</td>
+            <td>{{ t.apellido }}</td>
+            <td>{{ t.cantidad_mantenimientos }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No hay datos disponibles.</p>
+{% endif %}
+
+<!-- Clientes con más máquinas instaladas -->
+<h3>Clientes con más máquinas instaladas</h3>
+{% if clientes_top_maquinas %}
+<table class="tabla-estilo" style="margin-bottom: 40px;">
+    <thead>
+        <tr>
+            <th>Cliente</th>
+            <th>Cantidad de máquinas</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in clientes_top_maquinas %}
+        <tr style="background-color: {% if loop.index is even %}#fff{% else %}#f9f9f9{% endif %};">
+            <td>{{ c.nombre }}</td>
+            <td>{{ c.cantidad_maquinas }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No hay datos disponibles.</p>
+{% endif %}
+
+{% endblock %}
