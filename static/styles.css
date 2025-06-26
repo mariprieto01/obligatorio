@@ -142,7 +142,6 @@ textarea {
     font-size: 1rem;
 }
 
-/* Tabla general */
 .tabla-estilo {
     width: 100%;
     border-collapse: collapse;
@@ -159,7 +158,6 @@ textarea {
     border: 1px solid #ccc;
 }
 
-/* Alternar color filas (par / impar) */
 .tabla-estilo tbody tr:nth-child(even) {
     background-color: #fff;
 }
@@ -176,25 +174,21 @@ textarea {
     text-align: center;
 }
 
-/* Centramos el título h2 y ponemos color */
 .titulo-tabla {
     text-align: center;
     color: #4a241b;
     margin-top: 30px;
 }
 
-/* Contenedor del botón Agregar nuevo cliente */
 .btn-container {
     margin-top: 20px;
     text-align: center;
 }
 
-/* Formulario en línea para el botón eliminar */
 .form-inline {
     display: inline;
 }
 
-/* Modal */
 .modal {
     display: none;
     position: fixed;
@@ -218,7 +212,6 @@ textarea {
     margin: 30px auto;
 }
 
-/* Nuevos estilos para etiquetas y campos en formulario-nuevo */
 .formulario-nuevo label {
     display: block;
     margin-bottom: 6px;
@@ -228,19 +221,19 @@ textarea {
 .formulario-nuevo input,
 .formulario-nuevo select,
 .formulario-nuevo textarea {
-    display: block;           /* para que respeten el ancho completo */
-    width: 100%;              /* ya lo tenés, pero se asegura */
+    display: block;           
+    width: 100%;              
     padding: 8px 10px;
-    margin-bottom: 20px;      /* un poco más de espacio */
+    margin-bottom: 20px;      
     border: 1px solid #ccc;
     border-radius: 5px;
-    box-sizing: border-box;   /* importante para que padding no aumente ancho */
+    box-sizing: border-box;   
     font-family: 'Georgia', serif;
     font-size: 1rem;
 }
 
 .formulario-nuevo label {
     display: block;
-    margin-bottom: 8px;       /* un poco más de espacio bajo label */
+    margin-bottom: 8px;       
     font-weight: bold;
 }
