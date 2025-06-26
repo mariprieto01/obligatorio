@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block content %}
+<h2>Recuperar contraseña</h2>
+
+<form method="POST">
+    <label for="correo">Correo electrónico:</label>
+    <input type="email" name="correo" required>
+    <button class="primary" type="submit">Continuar</button>
+    <button type="button" class="cancelar" onclick="window.location.href='/'">Cancelar</button>
+</form>
+
+{% if error %}
+<p style="color: red;">{{ error }}</p>
+{% endif %}
+{% endblock %}

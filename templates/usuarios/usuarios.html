@@ -1,10 +1,80 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Usuarios - Cafés Marloy{% endblock %}
+
+{% block content %}
+<h2 class="titulo-tabla">Listado de Usuarios</h2>
+
+<table class="tabla-estilo" id="tabla-usuarios">
+    <thead>
+        <tr>
+            <th>Correo</th>
+            <th>Administrador</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for u in usuarios %}
+        <tr>
+            <td>{{ u.correo }}</td>
+            <td>{{ 'Sí' if u.es_administrador else 'No' }}</td>
+            <td>
+                <button class="primary editar-btn" onclick="mostrarEditarModal('{{ u.correo }}', {{ 'true' if u.es_administrador else 'false' }})">Editar</button>
+                <form method="POST" action="{{ url_for('eliminar_usuario', correo=u.correo) }}" class="form-inline">
+                    <button type="submit" class="cancelar" onclick="return confirm('¿Estás seguro que querés eliminar este usuario?')">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="btn-container">
+    <a href="{{ url_for('nuevo_usuario') }}">
+        <button class="primary">Agregar nuevo usuario</button>
+    </a>
+</div>
+
+<!-- Modal para editar permisos -->
+<div id="modalEditar" class="modal">
+    <div class="modal-content">
+        <h3>Editar permisos de usuario</h3>
+        <form id="formEditar" method="POST" class="formulario-nuevo">
+            <p><strong>Usuario:</strong> <span id="editar-correo"></span></p>
+
+            <label>
+                <input type="checkbox" name="es_admin" id="editar-es-admin">
+                Administrador
+            </label>
+
+            <button type="submit" class="primary">Guardar cambios</button>
+            <button type="button" class="cancelar" onclick="cerrarModal()">Cancelar</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const modalEditar = document.getElementById('modalEditar');
+    const formEditar = document.getElementById('formEditar');
+    const correoSpan = document.getElementById('editar-correo');
+    const esAdminCheckbox = document.getElementById('editar-es-admin');
+
+    function cerrarModal() {
+        modalEditar.style.display = 'none';
+    }
+
+    function mostrarEditarModal(correo, esAdmin) {
+        correoSpan.textContent = correo;
+        esAdminCheckbox.checked = esAdmin;
+        formEditar.action = `/usuarios/editar/${correo}`;
+        modalEditar.style.display = 'flex';
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modalEditar) {
+            cerrarModal();
+        }
+    }
+</script>
+
+{% endblock %}

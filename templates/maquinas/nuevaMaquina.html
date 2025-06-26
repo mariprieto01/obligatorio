@@ -1,10 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Nueva Máquina - Cafés Marloy{% endblock %}
+
+{% block content %}
+<h2 class="titulo-tabla" style="text-align:center;">Agregar Nueva Máquina</h2>
+
+<form method="POST" action="{{ url_for('crear_maquina') }}" class="formulario-nuevo">
+    {% if error %}
+    <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    <label for="modelo">Modelo:</label>
+    <input type="text" name="modelo" id="modelo" required>
+
+    <label for="id_cliente">Cliente:</label>
+    <select name="id_cliente" id="id_cliente" required>
+        {% for cliente in clientes %}
+        <option value="{{ cliente.id_cliente }}">{{ cliente.nombre }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="ubicacion_cliente">Ubicación:</label>
+    <input type="text" name="ubicacion_cliente" id="ubicacion_cliente" required>
+
+    <label for="costo_alquiler_mensual">Costo alquiler mensual:</label>
+    <input type="number" name="costo_alquiler_mensual" id="costo_alquiler_mensual" step="0.01" required>
+
+    <button type="submit" class="primary">Crear Máquina</button>
+    <a href="{{ url_for('mostrar_maquinas') }}"><button type="button" class="cancelar">Cancelar</button></a>
+</form>
+{% endblock %}

@@ -19,7 +19,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 60px; /* Ajustá este valor si querés más/menos espacio arriba */
+            margin-top: 60px;
         }
 
         .logo {
@@ -36,7 +36,7 @@
         }
 
         .login-box {
-            background-color: rgba(255, 255, 255, 0.85); /* blanco con 85% de opacidad */
+            background-color: rgba(255, 255, 255, 0.85);
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
@@ -90,6 +90,9 @@
                 <input type="password" name="contraseña" placeholder="Contraseña" required>
                 <button type="submit">Entrar</button>
             </form>
+            <p style="text-align: center;">
+                <a href="{{ url_for('recuperar_contraseña') }}">¿Olvidaste tu contraseña?</a>
+            </p>
         </div>
     </div>
 

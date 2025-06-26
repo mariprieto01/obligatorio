@@ -1,10 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Consumos - Cafés Marloy{% endblock %}
 
-</body>
-</html>
+{% block content %}
+<h2 class="titulo-tabla">Registro de Consumos</h2>
+
+<table id="tabla-consumos" class="tabla-estilo tabla-margin-bottom">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Máquina</th>
+            <th>Insumo</th>
+            <th>Fecha</th>
+            <th>Cantidad Usada</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for consumo in consumos %}
+        <tr>
+            <td>{{ consumo.id_consumo }}</td>
+            <td>{{ consumo.modelo }}</td>
+            <td>{{ consumo.descripcion }}</td>
+            <td>{{ consumo.fecha }}</td>
+            <td>{{ consumo.cantidad_usada }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5" class="centrado">No hay consumos registrados.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="btn-container">
+    <a href="{{ url_for('nuevo_consumo') }}">
+        <button class="primary">Registrar nuevo consumo</button>
+    </a>
+</div>
+{% endblock %}

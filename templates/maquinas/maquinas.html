@@ -1,10 +1,114 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Máquinas - Cafés Marloy{% endblock %}
+
+{% block content %}
+<h2 class="titulo-tabla">Listado de Máquinas</h2>
+
+<table id="tabla-maquinas" class="tabla-estilo tabla-margin-bottom">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Modelo</th>
+            <th>Cliente</th>
+            <th>Ubicación</th>
+            <th>Costo Alquiler Mensual</th>
+            {% if es_admin %}
+            <th>Acciones</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for maquina in maquinas %}
+        <tr
+            data-id="{{ maquina.id_maquina }}"
+            data-modelo="{{ maquina.modelo }}"
+            data-id_cliente="{{ maquina.id_cliente }}"
+            data-ubicacion_cliente="{{ maquina.ubicacion_cliente }}"
+            data-costo="{{ maquina.costo_alquiler_mensual }}"
+            class="{{ loop.cycle('fila-impar', 'fila-par') }}"
+        >
+            <td>{{ maquina.id_maquina }}</td>
+            <td>{{ maquina.modelo }}</td>
+            <td>{{ maquina.nombre_cliente }}</td>
+            <td>{{ maquina.ubicacion_cliente }}</td>
+            <td>${{ "%.2f"|format(maquina.costo_alquiler_mensual) }}</td>
+            {% if es_admin %}
+            <td>
+                <button class="primary editar-btn">Editar</button>
+                <form method="POST" action="{{ url_for('eliminar_maquina', id_maquina=maquina.id_maquina) }}" class="form-inline">
+                    <button type="submit" class="cancelar" onclick="return confirm('¿Estás seguro que querés eliminar esta máquina?')">Eliminar</button>
+                </form>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if es_admin %}
+<div class="btn-container">
+    <a href="{{ url_for('nueva_maquina') }}">
+        <button class="primary">Agregar nueva máquina</button>
+    </a>
+</div>
+{% endif %}
+
+<!-- Modal editar máquina -->
+<div id="modalEditar" class="modal">
+    <div class="modal-content">
+        <h3>Editar Máquina</h3>
+        <form id="formEditar" method="POST">
+            <input type="hidden" name="id_maquina" id="editar-id">
+
+            <label>Modelo:</label>
+            <input type="text" name="modelo" id="editar-modelo" required>
+
+            <label>Cliente:</label>
+            <select name="id_cliente" id="editar-id_cliente" required>
+                {% for cliente in clientes %}
+                <option value="{{ cliente.id_cliente }}">{{ cliente.nombre }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Ubicación:</label>
+            <input type="text" name="ubicacion_cliente" id="editar-ubicacion_cliente" required>
+
+            <label>Costo alquiler mensual:</label>
+            <input type="number" step="0.01" name="costo_alquiler_mensual" id="editar-costo" required>
+
+            <button type="submit" class="primary">Guardar cambios</button>
+            <button type="button" class="cancelar" onclick="cerrarModal()">Cancelar</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const modalEditar = document.getElementById('modalEditar');
+    const formEditar = document.getElementById('formEditar');
+
+    function cerrarModal() {
+        modalEditar.style.display = 'none';
+    }
+
+    document.querySelectorAll('.editar-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tr = btn.closest('tr');
+            document.getElementById('editar-id').value = tr.dataset.id;
+            document.getElementById('editar-modelo').value = tr.dataset.modelo;
+            document.getElementById('editar-id_cliente').value = tr.dataset.id_cliente;
+            document.getElementById('editar-ubicacion_cliente').value = tr.dataset.ubicacion_cliente;
+            document.getElementById('editar-costo').value = tr.dataset.costo;
+
+            formEditar.action = `/maquinas/editar/${tr.dataset.id}`;
+            modalEditar.style.display = 'flex';
+        });
+    });
+
+    window.onclick = function(event) {
+        if (event.target == modalEditar) {
+            cerrarModal();
+        }
+    }
+</script>
+{% endblock %}

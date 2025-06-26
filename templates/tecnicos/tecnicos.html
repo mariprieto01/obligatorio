@@ -1,10 +1,101 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Técnicos - Cafés Marloy{% endblock %}
+
+{% block content %}
+<h2 class="titulo-tabla">Listado de Técnicos</h2>
+
+<table class="tabla-estilo" id="tabla-tecnicos">
+    <thead>
+        <tr>
+            <th>CI</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Teléfono</th>
+            {% if es_admin %}
+            <th>Acciones</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for tecnico in tecnicos %}
+        <tr data-ci="{{ tecnico.ci }}"
+            data-nombre="{{ tecnico.nombre }}"
+            data-apellido="{{ tecnico.apellido }}"
+            data-telefono="{{ tecnico.telefono }}">
+            <td>{{ tecnico.ci }}</td>
+            <td>{{ tecnico.nombre }}</td>
+            <td>{{ tecnico.apellido }}</td>
+            <td>{{ tecnico.telefono }}</td>
+            {% if es_admin %}
+            <td>
+                <button class="primary editar-btn">Editar</button>
+                <form method="POST" action="{{ url_for('eliminar_tecnico', ci=tecnico.ci) }}" class="form-inline">
+                    <button type="submit" class="cancelar" onclick="return confirm('¿Estás seguro que querés eliminar este técnico?')">Eliminar</button>
+                </form>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if es_admin %}
+<div class="btn-container">
+    <a href="{{ url_for('nuevo_tecnico') }}">
+        <button class="primary">Agregar nuevo técnico</button>
+    </a>
+</div>
+{% endif %}
+
+<!-- Modal editar técnico -->
+<div id="modalEditar" class="modal">
+    <div class="modal-content">
+        <h3>Editar Técnico</h3>
+        <form id="formEditar" method="POST">
+            <input type="hidden" name="ci" id="editar-ci">
+
+            <label>Nombre:</label>
+            <input type="text" name="nombre" id="editar-nombre" required>
+
+            <label>Apellido:</label>
+            <input type="text" name="apellido" id="editar-apellido" required>
+
+            <label>Teléfono:</label>
+            <input type="text" name="telefono" id="editar-telefono" required>
+
+            <button type="submit" class="primary">Guardar cambios</button>
+            <button type="button" class="cancelar" onclick="cerrarModal()">Cancelar</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const modalEditar = document.getElementById('modalEditar');
+    const formEditar = document.getElementById('formEditar');
+
+    function cerrarModal() {
+        modalEditar.style.display = 'none';
+    }
+
+    document.querySelectorAll('.editar-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tr = btn.closest('tr');
+            document.getElementById('editar-ci').value = tr.dataset.ci;
+            document.getElementById('editar-nombre').value = tr.dataset.nombre;
+            document.getElementById('editar-apellido').value = tr.dataset.apellido;
+            document.getElementById('editar-telefono').value = tr.dataset.telefono;
+
+            formEditar.action = `/tecnicos/editar/${tr.dataset.ci}`;
+            modalEditar.style.display = 'flex';
+        });
+    });
+
+    window.onclick = function(event) {
+        if (event.target == modalEditar) {
+            cerrarModal();
+        }
+    }
+</script>
+
+{% endblock %}

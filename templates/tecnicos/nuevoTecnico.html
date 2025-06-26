@@ -1,10 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Nuevo Técnico - Cafés Marloy{% endblock %}
+
+{% block content %}
+<h2 class="titulo-tabla">Agregar Nuevo Técnico</h2>
+
+<form method="POST" action="{{ url_for('crear_tecnico') }}" class="formulario-nuevo">
+    {% if error %}
+    <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    <label>Cédula de Identidad (CI):</label>
+    <input type="number" name="ci" required>
+
+    <label>Nombre:</label>
+    <input type="text" name="nombre" required>
+
+    <label>Apellido:</label>
+    <input type="text" name="apellido" required>
+
+    <label>Teléfono:</label>
+    <input type="text" name="telefono" required>
+
+    <button type="submit" class="primary">Crear Técnico</button>
+    <a href="{{ url_for('mostrar_tecnicos') }}">
+        <button type="button" class="cancelar">Cancelar</button>
+    </a>
+</form>
+
+{% endblock %}

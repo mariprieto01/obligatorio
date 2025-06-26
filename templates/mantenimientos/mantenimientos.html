@@ -1,10 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Mantenimientos - Cafés Marloy{% endblock %}
+
+{% block content %}
+<h2 class="titulo-tabla">Listado de Mantenimientos</h2>
+
+<table id="tabla-mantenimientos" class="tabla-estilo tabla-margin-bottom">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Máquina</th>
+            <th>Técnico</th>
+            <th>Tipo</th>
+            <th>Fecha</th>
+            <th>Observaciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for m in mantenimientos %}
+        <tr>
+            <td>{{ m.id_mantenimiento }}</td>
+            <td>{{ m.modelo_maquina }}</td>
+            <td>{{ m.nombre_tecnico }} {{ m.apellido_tecnico }}</td>
+            <td>{{ m.tipo }}</td>
+            <td>{{ m.fecha }}</td>
+            <td>{{ m.observaciones or '-' }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="6" class="centrado">No hay mantenimientos registrados.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="btn-container">
+    <a href="{{ url_for('nuevo_mantenimiento') }}">
+        <button class="primary">Agregar nuevo mantenimiento</button>
+    </a>
+</div>
+{% endblock %}
