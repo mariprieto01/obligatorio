@@ -584,7 +584,14 @@ def nuevo_tecnico():
 def crear_tecnico():
     if 'usuario' not in session or not session['usuario'].get('es_admin', False):
         return redirect(url_for('mostrar_tecnicos'))
-
+    
+    
+    
+    try:
+        ci = int(request.form.get('ci'))
+    except (ValueError, TypeError):
+        return render_template('tecnicos/nuevoTecnico.html', error="La CI debe ser un número entero.", usuario=session['usuario'])
+    
     nombre = request.form.get('nombre', '').strip()
     apellido = request.form.get('apellido', '').strip()
     telefono = request.form.get('telefono', '').strip()
@@ -603,7 +610,7 @@ def crear_tecnico():
 
     return redirect(url_for('mostrar_tecnicos'))
 
-@app.route('/tecnicos/editar/<string:ci>', methods=['POST'])
+@app.route('/tecnicos/editar/<int:ci>', methods=['POST'])
 def editar_tecnico(ci):
     if 'usuario' not in session or not session['usuario'].get('es_admin', False):
         return redirect(url_for('mostrar_tecnicos'))
@@ -624,7 +631,7 @@ def editar_tecnico(ci):
 
     return redirect(url_for('mostrar_tecnicos'))
 
-@app.route('/tecnicos/eliminar/<string:ci>', methods=['POST'])
+@app.route('/tecnicos/eliminar/<int:ci>', methods=['POST'])
 def eliminar_tecnico(ci):
     if 'usuario' not in session or not session['usuario'].get('es_admin', False):
         return redirect(url_for('mostrar_tecnicos'))
