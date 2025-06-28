@@ -52,3 +52,12 @@ INSERT INTO Tecnicos (ci, nombre, apellido, telefono) VALUES
 (56789012, 'Diego', 'Martínez', '093555666'),
 (67890123, 'Lucía', 'Gómez', '095666777'),
 (78901234, 'Marcos', 'López', '097777888');
+
+INSERT INTO Maquinas (modelo, id_cliente, ubicacion_cliente, costo_alquiler_mensual) VALUES
+('MX-100', 1, 'Depósito principal', 1500),
+('TX-200', 2, 'Taller central', 1200),
+('GX-300', 3, 'Obra Carrasco', 1800),
+('AX-400', 4, 'Campo norte', 1600),
+('DX-500', 5, 'Base operativa', 1400),
+('OX-600', 6, 'Galpón este', 1700),
+('ZX-700', 7, 'Oficina técnica', 1550);
