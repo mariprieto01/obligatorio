@@ -35,7 +35,8 @@ CREATE TABLE Maquinas (
     id_cliente INT NOT NULL,
     ubicacion_cliente VARCHAR(50) NOT NULL,
     costo_alquiler_mensual DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY (id_cliente) REFERENCES Clientes(id_cliente)
+    FOREIGN KEY (id_cliente) REFERENCES Clientes(id_cliente),
+    CONSTRAINT cliente_ubicaciones UNIQUE (id_cliente, ubicacion_cliente) -- Para que un cliente no tenga dos máquinas en la misma ubicación
 );
 
 CREATE TABLE Registro_consumo (

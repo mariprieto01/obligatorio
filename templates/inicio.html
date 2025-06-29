@@ -3,9 +3,30 @@
 {% block title %}Inicio - Cafés Marloy{% endblock %}
 
 {% block content %}
+<div class="contenido-inicio">
     {% if usuario %}
     <div class="bienvenida">
         Bienvenido, {{ usuario.correo }}
     </div>
     {% endif %}
+
+    <section class="quienes-somos" style="margin-top: 30px;">
+        <h2>¿Quiénes Somos?</h2>
+        <p>
+            En <strong>Cafés Marloy</strong> vivimos y respiramos café desde hace más de 30 años. Lo que comenzó como un pequeño emprendimiento familiar en Montevideo, hoy es un referente en la cultura cafetera uruguaya, siempre buscando la excelencia en cada taza que servimos.
+        </p>
+        <p>
+            Nuestro compromiso va más allá del café: queremos que cada cliente se sienta parte de nuestra familia, disfrutando no solo del aroma y sabor, sino también de la experiencia que nos hace únicos. Por eso desarrollamos un sistema de gestión propio que nos permite mantener la calidad, optimizar procesos y atender a cada proveedor, insumo y máquina con la precisión que merece.
+        </p>
+        <p>
+            Este sistema, pensado y creado por nuestro equipo, es la columna vertebral que sostiene cada etapa: desde la selección cuidadosa de proveedores, la administración de insumos, hasta el seguimiento de los técnicos y mantenimientos que garantizan que nuestras máquinas estén siempre listas para brindar lo mejor.
+        </p>
+        <p>
+            En Marloy, tecnología y tradición se unen para ofrecer un café de primera, con la calidez y cercanía que solo un verdadero apasionado del café puede brindar.
+        </p>
+        <p>
+            ¡Bienvenido a la experiencia Marloy, donde cada taza cuenta una historia!
+        </p>
+    </section>
+</div>
 {% endblock %}
