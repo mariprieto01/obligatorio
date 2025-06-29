@@ -8,7 +8,6 @@ app.secret_key = "password"
 
 # --- LOGIN, LOGOUT, INICIO ---
 
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -473,11 +472,10 @@ def crear_proveedor():
         return redirect(url_for("mostrar_proveedores"))
 
     nombre = request.form.get("nombre", "").strip()
-    direccion = request.form.get("direccion", "").strip()
-    telefono = request.form.get("telefono", "").strip()
+    contacto = request.form.get("contacto", "").strip()
     correo = request.form.get("correo", "").strip()
 
-    if not (nombre and direccion and telefono and correo):
+    if not (nombre and contacto):
         return render_template(
             "proveedores/nuevoProveedor.html",
             error="Todos los campos son obligatorios",
@@ -488,10 +486,10 @@ def crear_proveedor():
     cursor = conn.cursor()
     cursor.execute(
         """
-        INSERT INTO Proveedores (nombre, direccion, telefono, correo)
-        VALUES (%s, %s, %s, %s)
+        INSERT INTO Proveedores (nombre, contacto)
+        VALUES (%s, %s)
     """,
-        (nombre, direccion, telefono, correo),
+        (nombre, contacto),
     )
     conn.commit()
     conn.close()
@@ -505,19 +503,17 @@ def editar_proveedor(id_proveedor):
         return redirect(url_for("mostrar_proveedores"))
 
     nombre = request.form["nombre"]
-    direccion = request.form["direccion"]
-    telefono = request.form["telefono"]
-    correo = request.form["correo"]
+    contacto = request.form["contacto"]
 
     conn = get_admin_connection()
     cursor = conn.cursor()
     cursor.execute(
         """
         UPDATE Proveedores
-        SET nombre = %s, direccion = %s, telefono = %s, correo = %s
+        SET nombre = %s, contacto = %s 
         WHERE id_proveedor = %s
     """,
-        (nombre, direccion, telefono, correo, id_proveedor),
+        (nombre, contacto, id_proveedor),
     )
     conn.commit()
     conn.close()

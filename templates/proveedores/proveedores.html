@@ -10,7 +10,6 @@
         <tr>
             <th>ID</th>
             <th>Nombre</th>
-            <th>Dirección</th>
             <th>Teléfono</th>
             {% if es_admin %}
             <th>Acciones</th>
@@ -22,12 +21,10 @@
         <tr
             data-id="{{ proveedor.id_proveedor }}"
             data-nombre="{{ proveedor.nombre }}"
-            data-direccion="{{ proveedor.direccion }}"
-            data-telefono="{{ proveedor.telefono }}">
+            data-contacto="{{ proveedor.contacto }}">
             <td>{{ proveedor.id_proveedor }}</td>
             <td>{{ proveedor.nombre }}</td>
-            <td>{{ proveedor.direccion }}</td>
-            <td>{{ proveedor.telefono }}</td>
+            <td>{{ proveedor.contacto }}</td>
             {% if es_admin %}
             <td>
                 <button class="primary editar-btn">Editar</button>
@@ -59,11 +56,8 @@
             <label>Nombre:</label>
             <input type="text" name="nombre" id="editar-nombre" required>
 
-            <label>Dirección:</label>
-            <input type="text" name="direccion" id="editar-direccion" required>
-
             <label>Teléfono:</label>
-            <input type="text" name="telefono" id="editar-telefono" required>
+            <input type="text" name="contacto" id="editar-contacto" required>
 
             <button type="submit" class="primary">Guardar cambios</button>
             <button type="button" class="cancelar" onclick="cerrarModal()">Cancelar</button>
@@ -84,8 +78,7 @@
             const tr = btn.closest('tr');
             document.getElementById('editar-id').value = tr.dataset.id;
             document.getElementById('editar-nombre').value = tr.dataset.nombre;
-            document.getElementById('editar-direccion').value = tr.dataset.direccion;
-            document.getElementById('editar-telefono').value = tr.dataset.telefono;
+            document.getElementById('editar-contacto').value = tr.dataset.telefono;
 
             formEditar.action = `/proveedores/editar/${tr.dataset.id}`;
             modalEditar.style.display = 'flex';
