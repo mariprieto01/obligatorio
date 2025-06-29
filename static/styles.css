@@ -215,25 +215,18 @@ textarea {
 .formulario-nuevo label {
     display: block;
     margin-bottom: 6px;
-    font-weight: bold;
+    font-weight: normal;
 }
 
-.formulario-nuevo input,
 .formulario-nuevo select,
 .formulario-nuevo textarea {
-    display: block;           
-    width: 100%;              
+    display: block;
+    width: 100%;
     padding: 8px 10px;
-    margin-bottom: 20px;      
+    margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    box-sizing: border-box;   
+    box-sizing: border-box;
     font-family: 'Georgia', serif;
     font-size: 1rem;
-}
-
-.formulario-nuevo label {
-    display: block;
-    margin-bottom: 8px;       
-    font-weight: bold;
 }
