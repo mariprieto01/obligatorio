@@ -58,6 +58,9 @@
 <div id="modalEditar" class="modal">
     <div class="modal-content">
         <h3>Editar Máquina</h3>
+        {% if error %}
+            <div style="color: red">{{ error }}</div>
+        {% endif %}
         <form id="formEditar" method="POST">
             <input type="hidden" name="id_maquina" id="editar-id">
 
@@ -110,5 +113,17 @@
             cerrarModal();
         }
     }
+
+    {% if abrir_modal and maquina %}
+    window.addEventListener("load", () => {
+        document.getElementById('editar-id').value = {{ maquina.id_maquina }};
+        document.getElementById('editar-modelo').value = "{{ maquina.modelo }}";
+        document.getElementById('editar-id_cliente').value = {{ maquina.id_cliente }};
+        document.getElementById('editar-ubicacion_cliente').value = "{{ maquina.ubicacion_cliente }}";
+        document.getElementById('editar-costo').value = {{ maquina.costo_alquiler_mensual }};
+        formEditar.action = "/maquinas/editar/{{ maquina.id_maquina }}";
+        modalEditar.style.display = 'flex';
+    });
+    {% endif %}
 </script>
 {% endblock %}

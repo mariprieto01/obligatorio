@@ -24,7 +24,7 @@
     <input type="text" name="ubicacion_cliente" id="ubicacion_cliente" required>
 
     <label for="costo_alquiler_mensual">Costo alquiler mensual:</label>
-    <input type="number" name="costo_alquiler_mensual" id="costo_alquiler_mensual" step="0.01" required>
+    <input type="number" name="costo_alquiler_mensual" id="costo_alquiler_mensual" step="0.01" min="0" required>
 
     <button type="submit" class="primary">Crear Máquina</button>
     <a href="{{ url_for('mostrar_maquinas') }}"><button type="button" class="cancelar">Cancelar</button></a>

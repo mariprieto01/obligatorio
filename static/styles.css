@@ -87,7 +87,7 @@ header h1 {
 footer {
     text-align: center;
     padding: 10px;
-    color: #666;
+    color: whitesmoke;
     font-size: 0.8rem;
     margin-top: 50px;
 }
@@ -133,6 +133,7 @@ input[type="email"],
 input[type="number"],
 input[type="password"],
 input[type="date"],
+input[type="datetime-local"],
 select,
 textarea {
     width: 100%;

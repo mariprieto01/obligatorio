@@ -1,3 +1,6 @@
+import mysql.connector
+from mysql.connector.errors import IntegrityError, DatabaseError
+
 from flask import Flask, render_template, request, redirect, url_for, session
 import hashlib
 from conexiones import get_admin_connection, get_user_connection
@@ -616,14 +619,32 @@ def crear_maquina():
 
     conn = get_admin_connection()
     cursor = conn.cursor()
-    cursor.execute(
-        """
-        INSERT INTO Maquinas (modelo, id_cliente, ubicacion_cliente, costo_alquiler_mensual)
-        VALUES (%s, %s, %s, %s)
-    """,
-        (modelo, id_cliente, ubicacion_cliente, costo_alquiler_mensual),
-    )
-    conn.commit()
+    try:
+        cursor.execute(
+            """
+            INSERT INTO Maquinas (modelo, id_cliente, ubicacion_cliente, costo_alquiler_mensual)
+            VALUES (%s, %s, %s, %s)
+            """,
+            (modelo, id_cliente, ubicacion_cliente, costo_alquiler_mensual),
+        )
+        conn.commit()
+    except mysql.connector.IntegrityError as e:
+        if e.errno == 1062 and 'cliente_ubicaciones' in e.msg:
+            error = "Ya existe una máquina en esa ubicación para este cliente."
+            # Cargar clientes para mostrar el formulario con error
+            cursor = conn.cursor(dictionary=True)
+            cursor.execute("SELECT id_cliente, nombre FROM Clientes")
+            clientes = cursor.fetchall()
+            conn.close()
+            return render_template(
+                "maquinas/nuevaMaquina.html",
+                error=error,
+                clientes=clientes,
+                usuario=session["usuario"],
+            )
+        else:
+            conn.close()
+            raise
     conn.close()
 
     return redirect(url_for("mostrar_maquinas"))
@@ -641,21 +662,54 @@ def editar_maquina(id_maquina):
     ubicacion_cliente = request.form["ubicacion_cliente"]
     costo_alquiler_mensual = request.form["costo_alquiler_mensual"]
 
-    conn = get_admin_connection()
-    cursor = conn.cursor()
-    cursor.execute(
-        """
-        UPDATE Maquinas
-        SET modelo = %s, id_cliente = %s, ubicacion_cliente = %s, costo_alquiler_mensual = %s
-        WHERE id_maquina = %s
-    """,
-        (modelo, id_cliente, ubicacion_cliente, costo_alquiler_mensual, id_maquina),
-    )
-    conn.commit()
-    conn.close()
+    try:
+        conn = get_admin_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            UPDATE Maquinas
+            SET modelo = %s, id_cliente = %s, ubicacion_cliente = %s, costo_alquiler_mensual = %s
+            WHERE id_maquina = %s
+            """,
+            (modelo, id_cliente, ubicacion_cliente, costo_alquiler_mensual, id_maquina),
+        )
+        conn.commit()
+        conn.close()
+        return redirect(url_for("mostrar_maquinas"))
 
-    return redirect(url_for("mostrar_maquinas"))
+    except mysql.connector.IntegrityError as e:
+        if e.errno == 1062:
+            error = "Ya existe una máquina con ese cliente y ubicación."
+        else:
+            error = "Ocurrió un error inesperado."
 
+        conn = get_user_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            "SELECT m.*, c.nombre AS nombre_cliente FROM Maquinas m JOIN Clientes c ON m.id_cliente = c.id_cliente")
+        maquinas = cursor.fetchall()
+        cursor.execute("SELECT id_cliente, nombre FROM Clientes")
+        clientes = cursor.fetchall()
+        conn.close()
+
+        maquina = {
+            "id_maquina": id_maquina,
+            "modelo": modelo,
+            "id_cliente": int(id_cliente),
+            "ubicacion_cliente": ubicacion_cliente,
+            "costo_alquiler_mensual": float(costo_alquiler_mensual),
+        }
+
+        return render_template(
+            "maquinas/maquinas.html",
+            usuario=session["usuario"],
+            maquinas=maquinas,
+            clientes=clientes,
+            error=error,
+            maquina=maquina,
+            es_admin=True,
+            abrir_modal=True  # le dice al HTML que debe abrir el modal al cargar
+        )
 
 @app.route("/maquinas/eliminar/<int:id_maquina>", methods=["POST"])
 def eliminar_maquina(id_maquina):
@@ -1020,22 +1074,60 @@ def crear_mantenimiento():
             usuario=session["usuario"],
             maquinas=maquinas,
             tecnicos=tecnicos,
+            form_data={
+                "id_maquina": id_maquina,
+                "ci_tecnico": ci_tecnico,
+                "tipo": tipo,
+                "fecha": fecha,
+                "observaciones": observaciones,
+            },
         )
 
-    conn = get_admin_connection()
-    cursor = conn.cursor()
-    cursor.execute(
-        """
-        INSERT INTO Mantenimientos (id_maquina, ci_tecnico, tipo, fecha, observaciones)
-        VALUES (%s, %s, %s, %s, %s)
-    """,
-        (id_maquina, ci_tecnico, tipo, fecha, observaciones),
-    )
-    conn.commit()
-    conn.close()
+    try:
+        conn = get_admin_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            INSERT INTO Mantenimientos (id_maquina, ci_tecnico, tipo, fecha, observaciones)
+            VALUES (%s, %s, %s, %s, %s)
+        """,
+            (id_maquina, ci_tecnico, tipo, fecha, observaciones),
+        )
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return redirect(url_for("mostrar_mantenimientos"))
 
-    return redirect(url_for("mostrar_mantenimientos"))
+    except DatabaseError as e:
+        cursor.close()
+        conn.close()
+        if e.errno == 1644:
+            error = e.msg
+        else:
+            error = "Error al crear mantenimiento: " + str(e)
 
+        conn = get_user_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT id_maquina, modelo FROM Maquinas")
+        maquinas = cursor.fetchall()
+        cursor.execute("SELECT ci, nombre, apellido FROM Tecnicos")
+        tecnicos = cursor.fetchall()
+        conn.close()
+
+        return render_template(
+            "mantenimientos/nuevoMantenimiento.html",
+            error=error,
+            usuario=session["usuario"],
+            maquinas=maquinas,
+            tecnicos=tecnicos,
+            form_data={
+                "id_maquina": id_maquina,
+                "ci_tecnico": ci_tecnico,
+                "tipo": tipo,
+                "fecha": fecha,
+                "observaciones": observaciones,
+            },
+        )
 
 # --- INICIO APP ---
 if __name__ == "__main__":

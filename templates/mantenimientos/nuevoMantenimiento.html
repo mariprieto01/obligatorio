@@ -5,6 +5,12 @@
 {% block content %}
 <h2 class="titulo-tabla">Agregar Nuevo Mantenimiento</h2>
 
+{% if error %}
+    <div style="color: red; background-color: #fdd; border: 1px solid red; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
+        {{ error }}
+    </div>
+{% endif %}
+
 <form method="POST" action="{{ url_for('crear_mantenimiento') }}" class="formulario-nuevo">
     <label for="id_maquina">Máquina:</label>
     <select name="id_maquina" id="id_maquina" required>
@@ -26,7 +32,7 @@
     <input type="text" id="tipo" name="tipo" required>
 
     <label for="fecha">Fecha:</label>
-    <input type="date" id="fecha" name="fecha" required>
+    <input type="datetime-local" id="fecha" name="fecha" required>
 
     <label for="observaciones">Observaciones:</label>
     <textarea id="observaciones" name="observaciones"></textarea>
