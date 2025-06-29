@@ -13,28 +13,29 @@ def login():
     if request.method == "POST":
         correo = request.form["correo"]
         contraseña = request.form["contraseña"]
-
         contraseña_hasheada = hashlib.md5(contraseña.encode()).hexdigest()
-        # print(contraseña_hasheada)
 
         cnx = get_user_connection()
         cursor = cnx.cursor(dictionary=True)
 
-        query = "SELECT correo, es_administrador FROM login WHERE correo = %s AND contraseña = %s"
-        cursor.execute(query, (correo, contraseña_hasheada))
+        query = "SELECT correo, contraseña, es_administrador FROM login WHERE correo = %s"
+        cursor.execute(query, (correo,))
         usuario = cursor.fetchone()
 
         cursor.close()
         cnx.close()
 
-        if usuario:
-            session["usuario"] = {
-                "correo": usuario["correo"],
-                "es_admin": usuario["es_administrador"] == 1,
-            }
-            return redirect(url_for("inicio"))
+        if not usuario:
+            return render_template("login.html", error="El correo no está registrado.")
         else:
-            return render_template("login.html", error="Credenciales incorrectas")
+            if usuario["contraseña"] == contraseña_hasheada:
+                session["usuario"] = {
+                    "correo": usuario["correo"],
+                    "es_admin": usuario["es_administrador"] == 1,
+                }
+                return redirect(url_for("inicio"))
+            else:
+                return render_template("login.html", error="Contraseña incorrecta.")
 
     return render_template("login.html")
 
