@@ -40,7 +40,7 @@ def login():
     return render_template("login.html")
 
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def inicio():
     if "usuario" not in session:
         return redirect(url_for("login"))
@@ -100,7 +100,7 @@ def cambiar_contraseña():
     return render_template("cambiar_contraseña.html")
 
 
-@app.route("/logout")
+@app.route("/logout", methods=["GET"])
 def logout():
     session.clear()
     return redirect(url_for("login"))
@@ -109,7 +109,7 @@ def logout():
 # --- USUARIOS ---
 
 
-@app.route("/usuarios")
+@app.route("/usuarios", methods=["GET"])
 def mostrar_usuarios():
     if "usuario" not in session or not session["usuario"].get("es_admin"):
         return redirect(url_for("inicio"))
@@ -125,7 +125,7 @@ def mostrar_usuarios():
     )
 
 
-@app.route("/usuarios/nuevo")
+@app.route("/usuarios/nuevo", methods=["GET"])
 def nuevo_usuario():
     if "usuario" not in session or not session["usuario"].get("es_admin"):
         return redirect(url_for("mostrar_usuarios"))
@@ -210,7 +210,7 @@ def eliminar_usuario(correo):
 # --- CLIENTES ---
 
 
-@app.route("/clientes")
+@app.route("/clientes", methods=["GET"])
 def mostrar_clientes():
     if "usuario" not in session:
         return redirect(url_for("login"))
@@ -226,7 +226,7 @@ def mostrar_clientes():
     )
 
 
-@app.route("/clientes/nuevo")
+@app.route("/clientes/nuevo", methods=["GET"])
 def nuevo_cliente():
     if "usuario" not in session:
         return redirect(url_for("login"))
@@ -309,7 +309,7 @@ def eliminar_cliente(id_cliente):
 # --- INSUMOS ---
 
 
-@app.route("/insumos")
+@app.route("/insumos", methods=["GET"])
 def mostrar_insumos():
     if "usuario" not in session:
         return redirect(url_for("login"))
@@ -337,7 +337,7 @@ def mostrar_insumos():
     )
 
 
-@app.route("/insumos/nuevo")
+@app.route("/insumos/nuevo", methods=["GET"])
 def nuevo_insumo():
     if "usuario" not in session:
         return redirect(url_for("login"))
@@ -436,7 +436,7 @@ def eliminar_insumo(id_insumo):
 # --- PROVEEDORES ---
 
 
-@app.route("/proveedores")
+@app.route("/proveedores", methods=["GET"])
 def mostrar_proveedores():
     if "usuario" not in session:
         return redirect(url_for("login"))
@@ -457,7 +457,7 @@ def mostrar_proveedores():
     )
 
 
-@app.route("/proveedores/nuevo")
+@app.route("/proveedores/nuevo", methods=["GET"])
 def nuevo_proveedor():
     if "usuario" not in session or not session["usuario"].get("es_admin"):
         return redirect(url_for("mostrar_proveedores"))
@@ -474,7 +474,6 @@ def crear_proveedor():
 
     nombre = request.form.get("nombre", "").strip()
     contacto = request.form.get("contacto", "").strip()
-    correo = request.form.get("correo", "").strip()
 
     if not (nombre and contacto):
         return render_template(
@@ -539,7 +538,7 @@ def eliminar_proveedor(id_proveedor):
 # --- MÁQUINAS ---
 
 
-@app.route("/maquinas")
+@app.route("/maquinas", methods=["GET"])
 def mostrar_maquinas():
     if "usuario" not in session:
         return redirect(url_for("login"))
@@ -571,7 +570,7 @@ def mostrar_maquinas():
     )
 
 
-@app.route("/maquinas/nuevo")
+@app.route("/maquinas/nuevo", methods=["GET"])
 def nueva_maquina():
     if "usuario" not in session:
         return redirect(url_for("login"))
@@ -677,7 +676,7 @@ def eliminar_maquina(id_maquina):
 # --- TÉCNICOS ---
 
 
-@app.route("/tecnicos")
+@app.route("/tecnicos", methods=["GET"])
 def mostrar_tecnicos():
     if "usuario" not in session:
         return redirect(url_for("login"))
@@ -698,7 +697,7 @@ def mostrar_tecnicos():
     )
 
 
-@app.route("/tecnicos/nuevo")
+@app.route("/tecnicos/nuevo", methods=["GET"])
 def nuevo_tecnico():
     if "usuario" not in session or not session["usuario"].get("es_admin", False):
         return redirect(url_for("mostrar_tecnicos"))
@@ -788,7 +787,7 @@ def eliminar_tecnico(ci):
 # --- REGISTRO DE CONSUMO ---
 
 
-@app.route("/consumos")
+@app.route("/consumos", methods=["GET"])
 def mostrar_consumos():
     if "usuario" not in session:
         return redirect(url_for("login"))
@@ -812,7 +811,7 @@ def mostrar_consumos():
     )
 
 
-@app.route("/consumos/nuevo")
+@app.route("/consumos/nuevo", methods=["GET"])
 def nuevo_consumo():
     if "usuario" not in session:
         return redirect(url_for("login"))
@@ -864,7 +863,7 @@ def crear_consumo():
 
 
 # --- REPORTES ---
-@app.route("/reportes")
+@app.route("/reportes", methods=["GET"])
 def reportes():
     if "usuario" not in session:
         return redirect(url_for("login"))
@@ -947,7 +946,7 @@ def reportes():
 # --- MANTENIMIENTOS ---
 
 
-@app.route("/mantenimientos")
+@app.route("/mantenimientos", methods=["GET"])
 def mostrar_mantenimientos():
     if "usuario" not in session:
         return redirect(url_for("login"))
@@ -973,7 +972,7 @@ def mostrar_mantenimientos():
     )
 
 
-@app.route("/mantenimientos/nuevo")
+@app.route("/mantenimientos/nuevo", methods=["GET"])
 def nuevo_mantenimiento():
     if "usuario" not in session:
         return redirect(url_for("login"))

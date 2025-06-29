@@ -78,7 +78,7 @@
             const tr = btn.closest('tr');
             document.getElementById('editar-id').value = tr.dataset.id;
             document.getElementById('editar-nombre').value = tr.dataset.nombre;
-            document.getElementById('editar-contacto').value = tr.dataset.telefono;
+            document.getElementById('editar-contacto').value = tr.dataset.contacto;
 
             formEditar.action = `/proveedores/editar/${tr.dataset.id}`;
             modalEditar.style.display = 'flex';

@@ -75,9 +75,13 @@ header h1 {
 .container {
     max-width: 1100px;
     margin: 30px auto;
-    padding: 20px;
+    padding: 30px;
     background-color: white;
-    border-radius: 8px;
+    border-radius: 10px;
+}
+
+.container h2 {
+    margin-top: 10px;
 }
 
 footer {
@@ -120,7 +124,6 @@ button.cancelar:hover {
 
 .bienvenida {
     text-align: center;
-    margin-top: 100px;
     font-size: 2rem;
     color: #4a241b;
 }
@@ -229,4 +232,18 @@ textarea {
     box-sizing: border-box;
     font-family: 'Georgia', serif;
     font-size: 1rem;
+}
+
+.quienes-somos h2 {
+    color: #4a241b;
+}
+
+.quienes-somos p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 0px;
+}
+
+.contenido-inicio {
+    background-color: white;
 }

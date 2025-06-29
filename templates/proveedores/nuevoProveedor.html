@@ -5,16 +5,13 @@
 {% block content %}
 <h2 class="titulo-tabla" style="margin-bottom: 20px;">Agregar nuevo proveedor</h2>
 
-<form method="POST" class="formulario-nuevo">
+<form method="POST" action="{{ url_for('crear_proveedor') }}" class="formulario-nuevo">
     {% if error %}
         <p style="color: red;">{{ error }}</p>
     {% endif %}
 
     <label>Nombre:</label>
     <input type="text" name="nombre" required>
-
-    <label>Dirección:</label>
-    <input type="text" name="direccion" required>
 
     <label>Teléfono:</label>
     <input type="text" name="contacto" required>

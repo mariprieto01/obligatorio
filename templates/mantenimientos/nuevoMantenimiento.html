@@ -12,7 +12,7 @@
         {% for maquina in maquinas %}
         <option value="{{ maquina.id_maquina }}">{{ maquina.modelo }} - Cliente {{ maquina.id_cliente }}</option>
         {% endfor %}
-    </select><br><br>
+    </select>
 
     <label for="ci_tecnico">Técnico:</label>
     <select name="ci_tecnico" id="ci_tecnico" required>
@@ -20,16 +20,16 @@
         {% for tecnico in tecnicos %}
         <option value="{{ tecnico.ci }}">{{ tecnico.nombre }} {{ tecnico.apellido }}</option>
         {% endfor %}
-    </select><br><br>
+    </select>
 
     <label for="tipo">Tipo de mantenimiento:</label>
-    <input type="text" id="tipo" name="tipo" required><br><br>
+    <input type="text" id="tipo" name="tipo" required>
 
     <label for="fecha">Fecha:</label>
-    <input type="date" id="fecha" name="fecha" required><br><br>
+    <input type="date" id="fecha" name="fecha" required>
 
     <label for="observaciones">Observaciones:</label>
-    <textarea id="observaciones" name="observaciones"></textarea><br><br>
+    <textarea id="observaciones" name="observaciones"></textarea>
 
     <button type="submit" class="primary">Agregar</button>
     <a href="{{ url_for('mostrar_mantenimientos') }}"><button type="button" class="cancelar">Cancelar</button></a>
