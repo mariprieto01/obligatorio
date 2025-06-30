@@ -59,7 +59,9 @@
     <div class="modal-content">
         <h3>Editar Máquina</h3>
         {% if error %}
-            <div style="color: red">{{ error }}</div>
+            <div style="color: red; background-color: #fdd; border: 1px solid red; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
+                {{ error }}
+            </div>
         {% endif %}
         <form id="formEditar" method="POST">
             <input type="hidden" name="id_maquina" id="editar-id">

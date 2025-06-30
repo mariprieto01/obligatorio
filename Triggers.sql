@@ -15,3 +15,18 @@ BEGIN
     END IF;
 END;
 
+-- Trigger para evitar que un técnico tenga dos mantenimientos en la misma hora al actualizar
+CREATE TRIGGER evitar_mantenimientos_en_misma_hora_update
+BEFORE UPDATE ON Mantenimientos
+FOR EACH ROW
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM Mantenimientos
+        WHERE ci_tecnico = NEW.ci_tecnico
+          AND NEW.fecha BETWEEN DATE_SUB(fecha, INTERVAL 59 MINUTE) AND DATE_ADD(fecha, INTERVAL 59 MINUTE)
+          AND id_mantenimiento <> OLD.id_mantenimiento  -- Excluir el mantenimiento que se está actualizando
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El técnico ya tiene un mantenimiento en ese rango horario.';
+    END IF;
+END;

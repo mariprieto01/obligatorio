@@ -16,7 +16,7 @@
     <select name="id_maquina" id="id_maquina" required>
         <option value="">Seleccione una máquina</option>
         {% for maquina in maquinas %}
-        <option value="{{ maquina.id_maquina }}">{{ maquina.modelo }} - Cliente {{ maquina.id_cliente }}</option>
+        <option value="{{ maquina.id_maquina }}">{{ maquina.modelo }}</option>
         {% endfor %}
     </select>
 
