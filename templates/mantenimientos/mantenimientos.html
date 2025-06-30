@@ -14,29 +14,134 @@
             <th>Tipo</th>
             <th>Fecha</th>
             <th>Observaciones</th>
+            {% if es_admin %}
+            <th>Acciones</th>
+            {% endif %}
         </tr>
     </thead>
     <tbody>
         {% for m in mantenimientos %}
-        <tr>
+        <tr
+            data-id="{{ m.id_mantenimiento }}"
+            data-id-maquina="{{ m.id_maquina }}"
+            data-id-tecnico="{{ m.ci_tecnico }}"
+            data-tipo="{{ m.tipo }}"
+            data-fecha="{{ m.fecha|replace(' ', 'T') }}"
+            data-observaciones="{{ m.observaciones|default('') }}"
+        >
             <td>{{ m.id_mantenimiento }}</td>
             <td>{{ m.modelo_maquina }}</td>
             <td>{{ m.nombre_tecnico }} {{ m.apellido_tecnico }}</td>
             <td>{{ m.tipo }}</td>
             <td>{{ m.fecha }}</td>
             <td>{{ m.observaciones or '-' }}</td>
+            {% if es_admin %}
+            <td>
+                <button class="primary editar-btn">Editar</button>
+                <form method="POST" action="{{ url_for('eliminar_mantenimiento', id_mantenimiento=m.id_mantenimiento) }}" class="form-inline">
+                    <button type="submit" class="cancelar" onclick="return confirm('¿Seguro que querés eliminar este mantenimiento?')">Eliminar</button>
+                </form>
+            </td>
+            {% endif %}
         </tr>
         {% else %}
         <tr>
-            <td colspan="6" class="centrado">No hay mantenimientos registrados.</td>
+            <td colspan="7" class="centrado">No hay mantenimientos registrados.</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
 
+{% if es_admin %}
 <div class="btn-container">
     <a href="{{ url_for('nuevo_mantenimiento') }}">
         <button class="primary">Agregar nuevo mantenimiento</button>
     </a>
 </div>
+{% endif %}
+
+<div id="modalEditar" class="modal">
+    <div class="modal-content formulario-nuevo">
+        <h3>Editar Mantenimiento</h3>
+        {% if error %}
+        <div style="color: red; background-color: #fdd; border: 1px solid red; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
+            {{ error }}
+        </div>
+        {% endif %}
+        <form id="formEditar" method="POST">
+            <input type="hidden" name="id_mantenimiento" id="editar-id">
+
+            <label for="editar-id_maquina">Máquina:</label>
+            <select name="id_maquina" id="editar-id_maquina" required>
+                {% for maquina in maquinas %}
+                <option value="{{ maquina.id_maquina }}">{{ maquina.modelo }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="editar-ci_tecnico">Técnico:</label>
+            <select name="ci_tecnico" id="editar-ci_tecnico" required>
+                {% for tecnico in tecnicos %}
+                <option value="{{ tecnico.ci }}">{{ tecnico.nombre }} {{ tecnico.apellido }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="editar-tipo">Tipo:</label>
+            <input type="text" name="tipo" id="editar-tipo" required>
+
+            <label for="editar-fecha">Fecha:</label>
+            <input type="datetime-local" name="fecha" id="editar-fecha" required>
+
+            <label for="editar-observaciones">Observaciones:</label>
+            <textarea name="observaciones" id="editar-observaciones"></textarea>
+
+            <button type="submit" class="primary">Guardar cambios</button>
+            <button type="button" class="cancelar" onclick="cerrarModal()">Cancelar</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const modalEditar = document.getElementById('modalEditar');
+    const formEditar = document.getElementById('formEditar');
+
+    function cerrarModal() {
+        modalEditar.style.display = 'none';
+    }
+
+    document.querySelectorAll('.editar-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tr = btn.closest('tr');
+
+            document.getElementById('editar-id').value = tr.dataset.id;
+            document.getElementById('editar-id_maquina').value = tr.dataset.idMaquina;
+            document.getElementById('editar-ci_tecnico').value = tr.dataset.idTecnico;
+            document.getElementById('editar-tipo').value = tr.dataset.tipo;
+            document.getElementById('editar-fecha').value = tr.dataset.fecha;
+            document.getElementById('editar-observaciones').value = tr.dataset.observaciones;
+
+            formEditar.action = `/mantenimientos/editar/${tr.dataset.id}`;
+            modalEditar.style.display = 'flex';
+        });
+    });
+
+    window.onclick = function(event) {
+        if (event.target == modalEditar) {
+            cerrarModal();
+        }
+    };
+
+    {% if abrir_modal and mantenimiento %}
+    window.addEventListener("load", () => {
+        document.getElementById('editar-id').value = {{ mantenimiento.id_mantenimiento }};
+        document.getElementById('editar-id_maquina').value = {{ mantenimiento.id_maquina }};
+        document.getElementById('editar-ci_tecnico').value = {{ mantenimiento.ci_tecnico }};
+        document.getElementById('editar-tipo').value = "{{ mantenimiento.tipo }}";
+        document.getElementById('editar-fecha').value = "{{ mantenimiento.fecha|replace(' ', 'T') }}";
+        document.getElementById('editar-observaciones').value = "{{ mantenimiento.observaciones|default('') }}";
+        document.getElementById('formEditar').action = "/mantenimientos/editar/{{ mantenimiento.id_mantenimiento }}";
+        document.getElementById('modalEditar').style.display = 'flex';
+    });
+    {% endif %}
+
+</script>
 {% endblock %}
