@@ -999,7 +999,6 @@ def reportes():
 
 # --- MANTENIMIENTOS ---
 
-
 @app.route("/mantenimientos", methods=["GET"])
 def mostrar_mantenimientos():
     if "usuario" not in session:
@@ -1017,12 +1016,22 @@ def mostrar_mantenimientos():
     """
     )
     mantenimientos = cursor.fetchall()
+
+    cursor.execute("SELECT id_maquina, modelo FROM Maquinas")
+    maquinas = cursor.fetchall()
+
+    cursor.execute("SELECT ci, nombre, apellido FROM Tecnicos")
+    tecnicos = cursor.fetchall()
+
     conn.close()
 
     return render_template(
         "mantenimientos/mantenimientos.html",
         usuario=session["usuario"],
         mantenimientos=mantenimientos,
+        maquinas=maquinas,
+        tecnicos=tecnicos,
+        es_admin=session["usuario"].get("es_admin", False),
     )
 
 
@@ -1128,6 +1137,95 @@ def crear_mantenimiento():
                 "observaciones": observaciones,
             },
         )
+
+@app.route("/mantenimientos/editar/<int:id_mantenimiento>", methods=["POST"])
+def editar_mantenimiento(id_mantenimiento):
+    if "usuario" not in session or not session["usuario"].get("es_admin"):
+        return redirect(url_for("login" if "usuario" not in session else "mostrar_mantenimientos"))
+
+    id_maquina = request.form["id_maquina"]
+    ci_tecnico = request.form["ci_tecnico"]
+    tipo = request.form["tipo"].strip()
+    fecha = request.form["fecha"]
+    observaciones = request.form.get("observaciones", "").strip()
+
+    try:
+        conn = get_admin_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            UPDATE Mantenimientos
+            SET id_maquina = %s, ci_tecnico = %s, tipo = %s, fecha = %s, observaciones = %s
+            WHERE id_mantenimiento = %s
+        """,
+            (id_maquina, ci_tecnico, tipo, fecha, observaciones, id_mantenimiento),
+        )
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return redirect(url_for("mostrar_mantenimientos"))
+
+    except DatabaseError as e:
+        cursor.close()
+        conn.close()
+
+        error = e.msg if e.errno == 1644 else f"Error al editar mantenimiento: {str(e)}"
+
+        conn = get_user_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            """
+            SELECT m.*, ma.modelo AS modelo_maquina, t.nombre AS nombre_tecnico, t.apellido AS apellido_tecnico
+            FROM Mantenimientos m
+            JOIN Maquinas ma ON m.id_maquina = ma.id_maquina
+            JOIN Tecnicos t ON m.ci_tecnico = t.ci
+            ORDER BY m.fecha DESC
+        """
+        )
+        mantenimientos = cursor.fetchall()
+        cursor.execute("SELECT id_maquina, modelo FROM Maquinas")
+        maquinas = cursor.fetchall()
+        cursor.execute("SELECT ci, nombre, apellido FROM Tecnicos")
+        tecnicos = cursor.fetchall()
+        cursor.execute("SELECT * FROM Mantenimientos WHERE id_mantenimiento = %s", (id_mantenimiento,))
+        mantenimiento = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        return render_template(
+            "mantenimientos/mantenimientos.html",
+            usuario=session["usuario"],
+            mantenimientos=mantenimientos,
+            maquinas=maquinas,
+            tecnicos=tecnicos,
+            error=error,
+            abrir_modal=True,
+            mantenimiento=mantenimiento,
+            es_admin=session["usuario"].get("es_admin", False)
+        )
+
+@app.route("/mantenimientos/eliminar/<int:id_mantenimiento>", methods=["POST"])
+def eliminar_mantenimiento(id_mantenimiento):
+    if "usuario" not in session:
+        return redirect(url_for("login"))
+    if not session["usuario"].get("es_admin", False):
+        return redirect(url_for("mostrar_mantenimientos"))
+
+    try:
+        conn = get_admin_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            "DELETE FROM Mantenimientos WHERE id_mantenimiento = %s", (id_mantenimiento,)
+        )
+        conn.commit()
+        cursor.close()
+        conn.close()
+    except Exception as e:
+        print("Error al eliminar mantenimiento:", e)  # Opcional: log para vos
+
+    return redirect(url_for("mostrar_mantenimientos"))
+
 
 # --- INICIO APP ---
 if __name__ == "__main__":
