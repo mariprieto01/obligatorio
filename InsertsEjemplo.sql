@@ -36,13 +36,14 @@ INSERT INTO Tecnicos (ci, nombre, apellido, telefono) VALUES
 INSERT INTO Mantenimientos (id_maquina, ci_tecnico, tipo, fecha, observaciones) VALUES
     (1, 45678901, 'Preventivo', '2025-06-01 10:30:00', 'Cambio de filtro y limpieza general'),
     (3, 48765432, 'Asistencia', '2025-06-10 14:00:00', 'Error en dispensador de leche'),
-    (2, 49001234, 'Preventivo', '2025-06-15 09:00:00', 'Revisión general sin novedades');
+    (2, 49001234, 'Preventivo', '2025-06-15 09:00:00', 'Revisión general sin novedades'),
+    (4, 45678901, 'Asistencia', '2025-06-20 11:15:00', 'Fugas de agua en la base');
 
 INSERT INTO Registro_consumo (id_maquina, id_insumo, fecha, cantidad_usada) VALUES
-    (1, 1, '2025-06-05', 20),
-    (1, 2, '2025-06-05', 10),
-    (2, 1, '2025-06-05', 15),
-    (2, 6, '2025-06-06', 8),
-    (3, 4, '2025-06-07', 12),
-    (3, 2, '2025-06-07', 6),
-    (4, 3, '2025-06-08', 5);
+    (1, 1, '2025-07-05', 20),
+    (1, 2, '2025-07-05', 10),
+    (2, 1, '2025-07-05', 15),
+    (2, 6, '2025-07-06', 8),
+    (3, 4, '2025-07-07', 12),
+    (3, 2, '2025-07-07', 6),
+    (4, 3, '2025-07-08', 5);
