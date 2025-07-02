@@ -934,10 +934,11 @@ def reportes():
                           SUM(m.costo_alquiler_mensual) +
                           COALESCE(SUM(rc.cantidad_usada * i.precio_unitario), 0) AS total_mes
                    FROM Clientes c
-                            LEFT JOIN Maquinas m ON c.id_cliente = m.id_cliente
-                            LEFT JOIN Registro_consumo rc ON m.id_maquina = rc.id_maquina
-                            LEFT JOIN Insumos i ON rc.id_insumo = i.id_insumo
-                   WHERE rc.fecha >= DATE_FORMAT(CURRENT_DATE, '%Y-%m-01')
+                        LEFT JOIN Maquinas m ON c.id_cliente = m.id_cliente
+                        LEFT JOIN Registro_consumo rc
+                            ON m.id_maquina = rc.id_maquina
+                            AND rc.fecha >= DATE_FORMAT(CURRENT_DATE, '%Y-%m-01')
+                        LEFT JOIN Insumos i ON rc.id_insumo = i.id_insumo
                    GROUP BY c.id_cliente
                    """
     )
