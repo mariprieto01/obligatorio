@@ -1223,7 +1223,7 @@ def eliminar_mantenimiento(id_mantenimiento):
         cursor.close()
         conn.close()
     except Exception as e:
-        print("Error al eliminar mantenimiento:", e)
+        print("Error al eliminar mantenimiento:", e)  # Opcional: log para vos
 
     return redirect(url_for("mostrar_mantenimientos"))
 
